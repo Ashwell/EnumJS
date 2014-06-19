@@ -1,3 +1,4 @@
+/*globals module */
 !(function(){
   var exports;
   if( typeof window !== 'undefined'){
@@ -14,7 +15,8 @@ exports.Enum = (function () {
   var Enum = function ( enums ) {
     var i,
         keys = [],
-        values = [];
+        values = [],
+        length = 0;
 
 //  if(!(enums instanceof Array)){
 //    throw new SyntaxError('Enum input must be an Array');
@@ -33,6 +35,7 @@ exports.Enum = (function () {
               writable:     false
             }
           );
+          ++length;
           values.push(i);
           keys.push(enums[i]);
         } catch (e) {
@@ -56,6 +59,7 @@ exports.Enum = (function () {
                 writable:     false
               }
             );
+            ++length;
             values.push(enums[i]);
             keys.push(i);
           } catch (e) {
@@ -65,12 +69,13 @@ exports.Enum = (function () {
       }
     }
 
-//    Object.defineProperty(this, 'length', {
-//      configurable: false,
-//      enumerable:   false,
-//      value:        enums.length,
-//      writable:     false
-//    });
+    Object.defineProperty(this, 'length', {
+      configurable: false,
+      enumerable:   false,
+      value:        length,
+      writable:     false
+    });
+
 //    Object.defineProperty(this, 'keys', {
 //      configurable: false,
 //      enumerable:   false,
@@ -89,7 +94,7 @@ exports.Enum = (function () {
 
   // Prototype Functions
   Object.defineProperties(Enum.prototype, {
-    'length':{
+    /*'length':{
       configurable: false,
       enumerable:   false,
       get:          function () {
@@ -100,16 +105,17 @@ exports.Enum = (function () {
         return count;
         //return this.keys.length;
       }
-    },
+    },*/
     'keys':{
       configurable: false,
       enumerable:   false,
       get:          function () {
         var keys = [];
-        for ( var prop in this )
+        for ( var prop in this ){
           if ( this.hasOwnProperty(prop) ){
             keys.push(prop);
           }
+        }
         return keys;
       }   
     },
@@ -133,49 +139,6 @@ exports.Enum = (function () {
       value:        function(){return '[object Enum]';}
     }
   });
-  /*
-  Object.defineProperty(Enum.prototype, 'length', {
-    configurable: false,
-    enumerable:   false,
-    get:          function () {
-      var count = 0;
-      for ( var prop in this )
-        ++count;
-      return count;
-//      return this.keys.length;
-    }
-  });
-  Object.defineProperty(Enum.prototype, 'keys', {
-    configurable: false,
-    enumerable:   false,
-    get:          function () {
-      var keys = [];
-      for ( var prop in this )
-        if ( this.hasOwnProperty(prop) )
-          keys.push(prop);
-      return keys;
-    }
-  });
-  Object.defineProperty(Enum.prototype, 'values', {
-    configurable: false,
-    enumerable:   false,
-    get:          function () {
-      var values = [];
-      for ( var prop in this )
-        if ( this.hasOwnProperty(prop) )
-          values.push(this[prop]);
-      return values;
-    }
-  });
-  Object.defineProperty(Enum.prototype, 'toString', {
-    configurable: false,
-    enumerable:   false,
-    value:        function () {
-      return '[object Enum]';
-    },
-    writable:     false
-  });
-  */
 
   // Export
   return Enum;
