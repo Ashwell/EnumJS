@@ -88,6 +88,48 @@ exports.Enum = (function () {
   };
 
   // Prototype Functions
+  Object.defineProperties(Enum.prototype, {
+    'length':{
+      configurable: false,
+      enumerable:   false,
+      get:          function () {
+        var count = 0;
+        for ( var prop in this )
+          ++count;
+        return count;
+        //return this.keys.length;
+      }
+    },
+    'keys':{
+      configurable: false,
+      enumerable:   false,
+      get:          function () {
+        var keys = [];
+        for ( var prop in this )
+          if ( this.hasOwnProperty(prop) )
+            keys.push(prop);
+        return keys;
+      }   
+    },
+    'values':{
+      configurable: false,
+      enumerable:   false,
+      get:          function () {
+        var values = [];
+        for ( var prop in this )
+          if ( this.hasOwnProperty(prop) )
+            values.push(this[prop]);
+        return values;
+      }
+    },
+    'toString':{
+      configurable: false,
+      enumerable:   false,
+      writable:     false,
+      value:        function(){return '[object Enum]';}
+    }
+  });
+  /*
   Object.defineProperty(Enum.prototype, 'length', {
     configurable: false,
     enumerable:   false,
@@ -129,6 +171,7 @@ exports.Enum = (function () {
     },
     writable:     false
   });
+  */
 
   // Export
   return Enum;
