@@ -94,8 +94,9 @@ exports.Enum = (function () {
       enumerable:   false,
       get:          function () {
         var count = 0;
-        for ( var prop in this )
+        for ( var prop in this ){
           ++count;
+        }
         return count;
         //return this.keys.length;
       }
@@ -106,8 +107,9 @@ exports.Enum = (function () {
       get:          function () {
         var keys = [];
         for ( var prop in this )
-          if ( this.hasOwnProperty(prop) )
+          if ( this.hasOwnProperty(prop) ){
             keys.push(prop);
+          }
         return keys;
       }   
     },
@@ -116,9 +118,11 @@ exports.Enum = (function () {
       enumerable:   false,
       get:          function () {
         var values = [];
-        for ( var prop in this )
-          if ( this.hasOwnProperty(prop) )
+        for ( var prop in this ){
+          if ( this.hasOwnProperty(prop) ){
             values.push(this[prop]);
+          }
+        }
         return values;
       }
     },
