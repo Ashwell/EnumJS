@@ -1,13 +1,10 @@
 EnumJS
 ======
-
 A simple way to create an immutable list of enums in ES5.
 Still a WIP use at your own risk
-[![Code Climate](https://codeclimate.com/github/Ashwell/EnumJS.png)](https://codeclimate.com/github/Ashwell/EnumJS)
 
 Usage
 ======
-
 NodeJS
 ```javascript
 var Enum = require('Enum').Enum;
@@ -26,3 +23,6 @@ var myEnumFromObj = new Enum({one:1, two:2, three:3});
 ```
 
 Come back for more updates!
+
+
+[![Code Climate](https://codeclimate.com/github/Ashwell/EnumJS.png)](https://codeclimate.com/github/Ashwell/EnumJS)
