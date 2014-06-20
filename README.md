@@ -3,6 +3,7 @@ EnumJS
 
 A simple way to create an immutable list of enums in ES5.
 Still a WIP use at your own risk
+[![Code Climate](https://codeclimate.com/github/Ashwell/EnumJS.png)](https://codeclimate.com/github/Ashwell/EnumJS)
 
 Usage
 ======
