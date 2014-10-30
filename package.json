@@ -1,0 +1,20 @@
+{
+  "name": "enumJS",
+  "version": "0.0.1",
+  "description": "A class for making ENUMs in JavaScript ES5",
+  "main": "enum.js",
+  "private": true,
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ashwell/EnumJS.git"
+  },
+  "author": "Ryan Bogle <ryan.bogle@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ashwell/EnumJS/issues"
+  },
+  "homepage": "https://github.com/Ashwell/EnumJS"
+}
