@@ -6,12 +6,12 @@
   } else if( typeof module !== 'undefined' ){
     exports = module.exports;
   } else {
-    console.warn("I don't know where to export to....Enums.js");
+    console.warn('I don\'t know where to export to....Enums.js');
     exports = {};
   }
 
 exports.Enum = (function () {
-  "use strict";
+  'use strict';
   var Enum = function ( enums ) {
     var i,
         keys = [],
@@ -117,7 +117,7 @@ exports.Enum = (function () {
           }
         }
         return keys;
-      }   
+      }
     },
     'values':{
       configurable: false,
