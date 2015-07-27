@@ -1,6 +1,9 @@
 /*globals module */
 !(function(){
+  'use strict';
+
   var exports;
+
   if( typeof window !== 'undefined'){
     exports = window;
   } else if( typeof module !== 'undefined' ){
@@ -11,7 +14,6 @@
   }
 
 exports.Enum = (function () {
-  'use strict';
   var Enum = function ( enums ) {
     var i,
         keys = [],

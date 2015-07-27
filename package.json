@@ -4,17 +4,24 @@
   "description": "A class for making ENUMs in JavaScript ES5",
   "main": "enum.js",
   "private": true,
-  "directories": {
-    "test": "tests"
-  },
+  "license": "MIT",
+  "author": "Ryan Bogle <ryan.bogle@gmail.com>",
+  "homepage": "https://github.com/Ashwell/EnumJS",
   "repository": {
     "type": "git",
     "url": "https://github.com/Ashwell/EnumJS.git"
   },
-  "author": "Ryan Bogle <ryan.bogle@gmail.com>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Ashwell/EnumJS/issues"
   },
-  "homepage": "https://github.com/Ashwell/EnumJS"
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "tape 'tests/**/*.js'"
+  },
+  "devDependencies": {
+    "eslint": "^0.24.1",
+    "tape": "^4.0.1"
+  }
 }
