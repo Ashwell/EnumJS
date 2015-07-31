@@ -2,7 +2,7 @@
   "name": "enumJS",
   "version": "0.0.1",
   "description": "A class for making ENUMs in JavaScript ES5",
-  "main": "enum.js",
+  "main": "src/enum.js",
   "private": true,
   "license": "MIT",
   "author": "Ryan Bogle <ryan.bogle@gmail.com>",
