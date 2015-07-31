@@ -2,7 +2,7 @@
 
 var
   test = require( 'tape' ),
-  Enum = require( '../enum' ).Enum;
+  Enum = require( '../src/enum' ).Enum;
 
 test( 'enums can be created from a list of strings', function( assert ) {
   var
