@@ -18,10 +18,13 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "tape 'tests/**/*.js'"
+    "test": "tape 'tests/**/*.js' | tap-spec",
+    "posttest": "eslint ."
   },
   "devDependencies": {
-    "eslint": "^0.24.1",
-    "tape": "^4.0.1"
+    "babel-eslint": "^5.0.0-beta6",
+    "eslint": "^1.10.3",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.4.0"
   }
 }
