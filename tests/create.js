@@ -1,8 +1,7 @@
 'use strict';
 
-var
-  test = require( 'tape' ),
-  Enum = require( '../src/enum' ).Enum;
+import test from 'tape';
+import Enum from '../src/enum';
 
 test( 'enums can be created from a list of strings', function( assert ) {
   var
