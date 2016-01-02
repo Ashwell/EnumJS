@@ -1,14 +1,14 @@
 'use strict';
 
 import test from 'tape';
-import Enum from '../src/enum';
+import Enum from '../src/api';
 
 test( 'enums can be created from a list of strings', function( assert ) {
   var
     args = [ 'one', 'two', 'three', 'four', 'five' ],
     myEnum = new Enum( args );
 
-  args.forEach(function( propName ) {
+  args.forEach( propName => {
     assert.true( propName in myEnum, propName + ' is in enum' );
   });
 
@@ -18,15 +18,15 @@ test( 'enums can be created from a list of strings', function( assert ) {
 test( 'enums can be created from an object of name:value pairs', function( assert ) {
   var
     args = {
-      1: 'one',
-      2: 'two',
-      3: 'three',
-      4: 'four',
-      5: 'five'
+      1: 'a',
+      2: 'b',
+      3: 'c',
+      4: 'd',
+      5: 'e'
     },
     myEnum = new Enum( args );
 
-  Object.keys( args ).forEach(function( propName ) {
+  Object.keys( args ).forEach( propName => {
     var value = args[ propName ];
 
     assert.true( propName in myEnum, propName + ' is in enum' );
@@ -35,4 +35,3 @@ test( 'enums can be created from an object of name:value pairs', function( asser
 
   assert.end();
 });
-

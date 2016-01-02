@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "A class for making ENUMs in JavaScript ES5",
   "main": "index.js",
-  "jsnext:main": "src/enum.js",
+  "jsnext:main": "src/api.js",
   "license": "MIT",
   "author": "Ryan Bogle <ryan.bogle@gmail.com>",
   "homepage": "https://github.com/Ashwell/EnumJS",
@@ -18,10 +18,14 @@
   "directories": {
     "test": "tests"
   },
+  "config": {
+    "srcEntry": "src/api.js",
+    "dist": "dist/enum.js"
+  },
   "scripts": {
     "clean:dist": "trash 'dist/*'",
     "prebuild": "npm run clean:dist",
-    "build": "browserify src/enum.js -o dist/enum.js -t [ babelify --presets [ es2015 ] ] --standalone enumFactory",
+    "build": "browserify src/api.js -o dist/enum.js -t [ babelify --presets [ es2015 ] ] --standalone enumFactory",
     "lint": "eslint .",
     "test": "browserify tests/create.js -t [ babelify --presets [ es2015 ] ] | node | tap-spec",
     "posttest": "",
