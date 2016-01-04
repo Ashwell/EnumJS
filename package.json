@@ -27,7 +27,7 @@
     "prebuild": "npm run clean:dist",
     "build": "browserify src/api.js -o dist/enum.js -t [ babelify --presets [ es2015 ] ] --standalone enumFactory",
     "lint": "eslint .",
-    "test": "browserify tests/create.js -t [ babelify --presets [ es2015 ] ] | node | tap-spec",
+    "test": "browserify tests/*.js -t [ babelify --presets [ es2015 ] ] | node | tap-spec",
     "posttest": "",
     "prepublish": "npm run build && npm test"
   },
