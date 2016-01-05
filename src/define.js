@@ -4,7 +4,7 @@ var
   defaults = {
     configurable: false,
     enumerable: true,
-    writeable: false
+    writable: false
   };
 
 define = function( instance, name, value, traits={}) {

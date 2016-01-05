@@ -1,5 +1,24 @@
 
+// todo: constructor: ([ keys ], [ values ]=[ 0..keys.length ])
+
 import define from './define';
+import argParse from './arg-parse';
+import createProto from './create-proto';
+
+var factory;
+
+factory = function( keys, values ) {
+  var Enum = function() {
+    keys.forEach(( key, index ) => define( this, key, values[ index ]));
+  };
+
+  Enum.prototype = createProto( keys, values, Enum );
+  return Object.freeze( new Enum());
+};
+
+export default function $enum( ...args ) {
+  return factory( argParse( ...args ));
+}
 
 var Enum;
 
@@ -117,4 +136,6 @@ Object.defineProperties( Enum.prototype, {
   }
 });
 
-export default Enum;
+export default function $enum( enums ) {
+  return new Enum( enums );
+}

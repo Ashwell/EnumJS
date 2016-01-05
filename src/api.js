@@ -4,7 +4,7 @@ import assign from './assign';
 
 var assignTo;
 
-assignTo = function ( assignee, ...args ) {
+assignTo = function( assignee, ...args ) {
   assign( enumFactory( ...args ), assignee );
 };
 

@@ -1,9 +1,8 @@
-'use strict';
 
 import test from 'tape';
 import Enum from '../src/api';
 
-test( 'enums can be created from a list of strings', function( assert ) {
+test.skip( 'enums can be created from a list of strings', function( assert ) {
   var
     args = [ 'one', 'two', 'three', 'four', 'five' ],
     myEnum = new Enum( args );
@@ -15,7 +14,7 @@ test( 'enums can be created from a list of strings', function( assert ) {
   assert.end();
 });
 
-test( 'enums can be created from an object of name:value pairs', function( assert ) {
+test.skip( 'enums can be created from an object of name:value pairs', function( assert ) {
   var
     args = {
       1: 'a',
