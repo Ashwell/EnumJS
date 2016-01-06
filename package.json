@@ -1,5 +1,5 @@
 {
-  "name": "enumJS",
+  "name": "enumjs",
   "private": true,
   "version": "0.0.1",
   "description": "A class for making ENUMs in JavaScript ES5",
@@ -25,7 +25,7 @@
   "scripts": {
     "clean:dist": "trash 'dist/*'",
     "prebuild": "npm run clean:dist",
-    "build": "browserify src/api.js -o dist/enum.js -t [ babelify --presets [ es2015 ] ] --standalone enumFactory",
+    "build": "browserify src/api.js -o dist/enum.js -t [ babelify --presets [ es2015 ] ] --standalone 'enumFactory'",
     "lint": "eslint .",
     "test": "browserify tests/*.js -t [ babelify --presets [ es2015 ] ] | node | tap-spec",
     "posttest": "",

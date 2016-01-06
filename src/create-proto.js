@@ -7,7 +7,10 @@ export default function createProto( keys, values, constructor ) {
   define( proto, 'length', keys.length );
   define( proto, 'keys', keys, { enumerable: false });
   define( proto, 'values', values, { enumerable: false });
-  proto.constructor = constructor;
+  define( proto, 'toString' );
+  define( proto, Symbol.toStringTag, function(){}, { enumerable: false });
+  define( proto, Symbol.iterator );
 
+  proto.constructor = constructor;
   return Object.freeze( proto );
 }

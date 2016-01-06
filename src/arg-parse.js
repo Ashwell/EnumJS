@@ -38,20 +38,31 @@ getKeyValueFromObject = function( object ) {
 };
 
 export default function argParse( ...args ) {
+  var [ first, second ] = args;
+
   // single argument, ( object | array | string )
   if ( args.length === 1 ) {
+    let
+      firstType = typeof first,
+      firstIsArray = Array.isArray( first );
+
     // arg is a single object of key value pairs
-    if ( Object.isObject( args[ 0 ])) {
-      return getKeyValueFromObject( args[ 0 ]);
+    if ( firstType !== 'string' && !firstIsArray ) {
+      return getKeyValueFromObject( first );
     }
 
-    // either [ names ] or 'single string' or just wrong
-    return [ args ];
+    // argument is a single array
+    if ( firstIsArray ) {
+      return [ first, intRange( 0, first.length )];
+    }
+
+    // argument is a 'single string'
+    return [ args, [ 0 ]];
   }
 
   // two arguments, ( startIndex, [ names ])
-  if ( args.length === 2 ) {
-    return [ args[ 1 ], intRange( args[ 0 ], args[ 1 ].length )];
+  if ( args.length === 2 && Array.isArray( second )) {
+    return [ second, intRange( first, second.length + first )];
   }
 
   // "unlimited" args, ( ...names );

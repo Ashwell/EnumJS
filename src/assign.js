@@ -1,6 +1,6 @@
 
 import define from './define';
-import enumFactory from './enum';
+import $enum from './enum';
 
 var assign;
 

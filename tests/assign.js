@@ -1,8 +1,8 @@
 
 import test from 'tape';
 
-import enumFactory, { assign } from '../src/api';
+import $enum, { assign } from '../src/api';
 
-test( 'assign takes enum instance', function( assert ) {
+test.skip( 'assign takes enum instance', function( assert ) {
   assert.fail( 'todo' );
 });

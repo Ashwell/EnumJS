@@ -1,16 +1,6 @@
 
-import enumFactory from './enum';
-import assign from './assign';
+import $enum from './enum';
+export default $enum;
 
-var assignTo;
-
-assignTo = function( assignee, ...args ) {
-  assign( enumFactory( ...args ), assignee );
-};
-
-enumFactory.assignTo = assignTo;
-enumFactory.assign = assign;
-
-export default enumFactory;
-export { assignTo as assignTo };
 export { default as assign } from './assign';
+export { default as assignTo } from './assign-to';
