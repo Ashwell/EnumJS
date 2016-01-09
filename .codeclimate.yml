@@ -1,14 +1,21 @@
 engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
   eslint:
+    enabled: true
+  fixme:
     enabled: true
   nodesecurity:
     enabled: false
 ratings:
   paths:
-  - src/**
-  - configs/**
-  - ./*.js
+  - "src/**"
+  - "configs/**"
+  - "./*.js"
 exclude_paths:
-- dist/**/*
-- build/**/*
-- tests/**/*
+- "dist/**/*"
+- "build/**/*"
+- "tests/**/*"
