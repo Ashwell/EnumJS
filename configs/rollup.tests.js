@@ -6,6 +6,7 @@ config.entry = entry;
 config.format = 'cjs';
 config.dest = 'build/enum.tests.js';
 config.external = [ 'tape' ];
+
 config.plugins.push( multiEntry( 'tests/**/*.js' ));
 
 export default config;
