@@ -1,3 +1,8 @@
+'use strict';
+
+var test = require('tape');
+test = 'default' in test ? test['default'] : test;
+
 var babelHelpers_typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -179,5 +184,120 @@ assignTo = function assignTo(assignee) {
 
 var assignTo$1 = assignTo;
 
-export { assign$2 as assign, assignTo$1 as assignTo };export default $enum;
-//# sourceMappingURL=enum.js.map
+test('proper default and named exports', function (assert) {
+  assert.equal(typeof $enum === 'undefined' ? 'undefined' : babelHelpers_typeof($enum), 'function', '$enum is a function');
+  assert.equal(typeof assign$2 === 'undefined' ? 'undefined' : babelHelpers_typeof(assign$2), 'function', 'assign is a function and named export');
+  assert.equal(typeof assignTo$1 === 'undefined' ? 'undefined' : babelHelpers_typeof(assignTo$1), 'function', 'assignTo is a function and named export');
+  assert.end();
+});
+
+test.skip('assign takes enum instance', function (assert) {
+  assert.fail('todo');
+});
+
+test.skip('assignTo takes enum arguments', function (assign) {
+  assign.fail('todo');
+});
+
+var descriptor;
+var addValue;
+descriptor = {
+  configurable: false,
+  enumerable: true,
+  writable: false
+};
+
+addValue = function addValue(value) {
+  return Object.assign(descriptor, { value: value });
+};
+
+/* constructor tests */
+test('$enum( ...names )', function (assert) {
+  var i = 0,
+      args = ['zero', 'one', 'two', 'three'],
+      myEnum = $enum.apply(undefined, args);
+
+  for (var prop in myEnum) {
+    if (myEnum.hasOwnProperty(prop)) {
+      assert.deepEqual(Object.getOwnPropertyDescriptor(myEnum, prop), addValue(i), 'property ' + prop + ' has enum descriptor with value ' + i);
+      i++;
+    }
+  }
+
+  assert.equal(i, args.length, 'iterated properties count matches argument list length');
+  assert.end();
+});
+
+test('$enum( { name: value })', function (assert) {
+  var length = 0,
+      argument = {
+    1: 'a',
+    2: 'b',
+    3: 'c',
+    4: 'd',
+    5: 'e'
+  },
+      myEnum = $enum(argument);
+
+  for (var prop in argument) {
+    if (argument.hasOwnProperty(prop)) {
+      var value = argument[prop];
+      assert.equals(value, myEnum[prop], 'enum value mirrors object based argument, ' + prop + ':' + value);
+      length++;
+    }
+  }
+
+  for (var prop in myEnum) {
+    if (myEnum.hasOwnProperty(prop)) {
+      assert.deepEqual(Object.getOwnPropertyDescriptor(myEnum, prop), addValue(argument[prop]), 'property ' + prop + ' has enum descriptor with value ' + myEnum[prop]);
+      length--;
+    }
+  }
+
+  assert.equal(length, 0, 'iterated properties count matches for both argument and enum');
+  assert.end();
+});
+
+test('$enum([ names ])', function (assert) {
+  var i = 0,
+      args = ['zero', 'one', 'two'],
+      myEnum = $enum(args);
+
+  for (var prop in myEnum) {
+    if (myEnum.hasOwnProperty(prop)) {
+      assert.deepEqual(Object.getOwnPropertyDescriptor(myEnum, prop), addValue(i), 'property ' + prop + ' has enum descriptor with value ' + i);
+      i++;
+    }
+  }
+
+  assert.equals(i, args.length, 'iterated properties count matches argument length');
+  assert.end();
+});
+
+test('$enum( startIndex, [ names ])', function (assert) {
+  var i = 0,
+      startIndex = 2,
+      enumValues,
+      enumList = ['two', 'three', 'four', 'five', '6'],
+      myEnum = $enum(startIndex, enumList);
+
+  enumValues = {
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    6: 6
+  };
+
+  for (var prop in myEnum) {
+    if (myEnum.hasOwnProperty(prop)) {
+      var value = enumValues[prop];
+      assert.deepEqual(Object.getOwnPropertyDescriptor(myEnum, prop), addValue(value), 'property ' + prop + ' has enum descriptor with value ' + value);
+      i++;
+    }
+  }
+
+  assert.equals(i, enumList.length, 'iterated properties count matches enum argument list');
+  assert.end();
+});
+//# sourceMappingURL=enum.tests.js.map
