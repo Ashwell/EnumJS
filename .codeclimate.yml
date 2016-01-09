@@ -1,0 +1,14 @@
+engines:
+  eslint:
+    enabled: true
+  nodesecurity:
+    enabled: true
+ratings:
+  paths:
+  - src/**
+  - configs/**
+  - *.js
+exclude_paths:
+- dist/**/*
+- build/**/*
+- tests/**/*
