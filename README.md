@@ -18,12 +18,10 @@ var myEnum = $enum( 'a', 'b', 'c' );
 
 NodeJS
 ```javascript
-var 
-  assign, assignTo
-  $enum = require( 'enumjs' );
+var $enum = require( 'enumjs' );
   
-assign = $enum.assign;
-assignTo = $enum.assignTo;
+$enum
+// { [Function: $enum] assign: [Function: assign], assignTo: [Function: assignTo] }
 
 var myEnum = $enum( 'one', 'two', 'three' );
 ```

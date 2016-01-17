@@ -36,10 +36,14 @@ var define$1 = define;
  *  $enum([ names ])
  *  $enum( startIndex, [ names ])
  *
+ *  names can be strings or Symbols, except for when single object of own keys
+ *
  * transformed to [ keys<Array>, [values<Array>] ]
 **/
+var intRange;
+var symbolsOrRange;
 var getKeyValueFromObject;
-var intRange = function intRange(first, last) {
+intRange = function intRange(first, last) {
   var curr = typeof first === 'number' ? first : 0,
       arr = [curr];
 
@@ -49,6 +53,11 @@ var intRange = function intRange(first, last) {
 
   return arr;
 };
+
+symbolsOrRange = function symbolsOrRange(list, first, last) {
+  return babelHelpers_typeof(list[0]) === 'symbol' ? list : intRange(first, last);
+};
+
 getKeyValueFromObject = function getKeyValueFromObject(object) {
   var keys = [],
       values = [];
@@ -61,64 +70,145 @@ getKeyValueFromObject = function getKeyValueFromObject(object) {
   return [keys, values];
 };
 
+/*eslint func-style:0*/
 function argParse() {
   for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];
   }
 
   var first = args[0];
+
   var second = args[1];
+  var firstType = typeof first === 'undefined' ? 'undefined' : babelHelpers_typeof(first);
 
-  // single argument, ( object | array | string )
-
+  // single argument, ( object | array | string | Symbol )
   if (args.length === 1) {
-    var firstType = typeof first === 'undefined' ? 'undefined' : babelHelpers_typeof(first),
-        firstIsArray = Array.isArray(first);
+    var isArray = Array.isArray(first);
 
-    // arg is a single object of key value pairs
-    if (firstType !== 'string' && !firstIsArray) {
-      return getKeyValueFromObject(first);
+    // single symbol
+    if (firstType === 'symbol') {
+      return [args, args];
     }
 
-    // argument is a single array
-    if (firstIsArray) {
-      return [first, intRange(0, first.length)];
+    // single string
+    if (firstType === 'string') {
+      return [args, [0]];
     }
 
-    // argument is a 'single string'
-    return [args, [0]];
+    // single array
+    if (isArray) {
+      return [first, symbolsOrRange(first, 0, first.length)];
+    }
+
+    // I guess it's an object
+    return getKeyValueFromObject(first);
   }
 
   // two arguments, ( startIndex, [ names ])
-  if (args.length === 2 && Array.isArray(second)) {
+  if (args.length === 2 && firstType === 'number' && Array.isArray(second)) {
     return [second, intRange(first, second.length + first)];
   }
 
   // "unlimited" args, ( ...names );
-  return [args, intRange(0, args.length)];
+  return [args, symbolsOrRange(args, 0, args.length)];
 }
 
+var stringReduce;
+var jsonReduce;
+stringReduce = function stringReduce(str, key, index) {
+  return '' + (index === 0 ? str : str + ', ') + key + ':' + this.values[index];
+};
+
+jsonReduce = function jsonReduce(obj, key, index) {
+  obj[key] = this.values[index];
+  return obj;
+};
+
+/*eslint-disable func-style*/
 function createProto(keys, values, constructor) {
+  /*eslint-enable func-style*/
   var proto = {};
 
   define$1(proto, 'length', keys.length);
   define$1(proto, 'keys', keys, { enumerable: false });
   define$1(proto, 'values', values, { enumerable: false });
-  define$1(proto, 'toString');
-  define$1(proto, Symbol.toStringTag, function () {}, { enumerable: false });
-  define$1(proto, Symbol.iterator);
+
+  // toString
+  (function () {
+    var stringCache = null;
+
+    define$1(proto, 'toString', function () {
+      if (stringCache == null) {
+        stringCache = this.keys.reduce(stringReduce.bind(this), '[ ') + ' ]';
+      }
+
+      return stringCache;
+    });
+  })();
+
+  //toJSON
+  (function () {
+    var jsonCache = null;
+
+    define$1(proto, 'toJSON', function () {
+      if (jsonCache == null) {
+        jsonCache = this.keys.reduce(jsonReduce.bind(this), {});
+      }
+
+      return jsonCache;
+    });
+  })();
+
+  // Well known Symbols
+  if (Symbol.toStringTag) {
+    define$1(proto, Symbol.toStringTag, 'Enum');
+  }
+
+  if (Symbol.toPrimitive) {
+    define$1(proto, Symbol.toPrimitive, function (hint) {
+      switch (hint) {
+        case 'number':
+          return this.length;
+        case 'string':
+          return '[ ' + this.keys.join(', ') + ' ]';
+        default:
+          return true;
+      }
+    }, { enumerable: false });
+  }
+
+  /*
+  TODO fix missing regeneratorRuntime
+  define( proto, Symbol.iterator, function*() {
+    for ( let i = 0 ; i < this.length ; i++ ) {
+      let
+        key = this.keys[ i ],
+        value = this.values[ i ];
+       yield { key, value };
+    }
+  });
+  */
 
   proto.constructor = constructor;
   return Object.freeze(proto);
 }
 
-var factory;
+/*eslint-disable func-style*/
+function stringifySymbol(symbol) {
+  var symStr = symbol.toString();
+  return symStr.slice(7, symStr.length - 1);
+}
 
+var factory;
+var $enum;
 factory = function factory(keys, values) {
+  var Enum;
   //  console.log( 'factory arguments: keys, values' );
   //  console.log( keys );
   //  console.log( values );
-  var Enum = function Enum() {
+  keys = babelHelpers_typeof(keys[0]) === 'symbol' ? keys.map(stringifySymbol) : keys;
+
+  Enum = function Enum() {
     var _this = this;
 
     keys.forEach(function (key, index) {
@@ -130,13 +220,13 @@ factory = function factory(keys, values) {
   return Object.freeze(new Enum());
 };
 
-function $enum() {
+$enum = function $enum() {
   return factory.apply(undefined, babelHelpers_toConsumableArray(argParse.apply(undefined, arguments)));
-}
+};
 
-var assign$1;
+var $enum$1 = $enum;
 
-assign$1 = function assign(enumInstance, assignTo) {
+var assign = function assign(enumInstance, assignTo) {
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
   var _iteratorError = undefined;
@@ -165,8 +255,6 @@ assign$1 = function assign(enumInstance, assignTo) {
   }
 };
 
-var assign$2 = assign$1;
-
 var assignTo;
 
 assignTo = function assignTo(assignee) {
@@ -174,10 +262,10 @@ assignTo = function assignTo(assignee) {
     args[_key - 1] = arguments[_key];
   }
 
-  assign($enum.apply(undefined, babelHelpers_toConsumableArray(argParse.apply(undefined, args))), assignee);
+  assign($enum$1.apply(undefined, args), assignee);
 };
 
 var assignTo$1 = assignTo;
 
-export { assign$2 as assign, assignTo$1 as assignTo };export default $enum;
+export { assign, assignTo$1 as assignTo };export default $enum$1;
 //# sourceMappingURL=enum.js.map

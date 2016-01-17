@@ -7,7 +7,7 @@ var
     writable: false
   };
 
-define = function( instance, name, value, traits={}) {
+define = function( instance, name, value, traits = {}) {
   traits = Object.assign({}, defaults, traits, { value });
   return Object.defineProperty( instance, name, traits );
 };

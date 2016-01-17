@@ -1,11 +1,11 @@
-
-import argParse from './arg-parse';
+/*eslint-disable no-unused-vars*/
 import $enum from './enum';
+import assign from './assign';
 
 var assignTo;
 
-assignTo = function assignTo( assignee, ...args ) {
-  assign( $enum( ...argParse( ...args )), assignee );
+assignTo = function( assignee, ...args ) {
+  assign( $enum( ...args ), assignee );
 };
 
 export default assignTo;

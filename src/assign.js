@@ -1,10 +1,7 @@
-
+/*eslint-disable no-unused-vars*/
 import define from './define';
-import $enum from './enum';
 
-var assign;
-
-assign = function ( enumInstance, assignTo ) {
+var assign = function( enumInstance, assignTo ) {
   for ( let { key, value } of enumInstance ) {
     define( assignTo, key, value );
   }

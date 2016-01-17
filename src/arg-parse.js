@@ -6,11 +6,14 @@
  *  $enum([ names ])
  *  $enum( startIndex, [ names ])
  *
+ *  names can be strings or Symbols, except for when single object of own keys
+ *
  * transformed to [ keys<Array>, [values<Array>] ]
 **/
 var
   intRange,
-  getKeyValueFromObject,
+  symbolsOrRange,
+  getKeyValueFromObject;
 
 intRange = function( first, last ) {
   var
@@ -22,6 +25,10 @@ intRange = function( first, last ) {
   }
 
   return arr;
+};
+
+symbolsOrRange = function( list, first, last ) {
+  return typeof list[ 0 ] === 'symbol' ? list : intRange( first, last );
 };
 
 getKeyValueFromObject = function( object ) {
@@ -37,34 +44,40 @@ getKeyValueFromObject = function( object ) {
   return [ keys, values ];
 };
 
+/*eslint func-style:0*/
 export default function argParse( ...args ) {
-  var [ first, second ] = args;
+  var
+    [ first, second ] = args,
+    firstType = typeof first;
 
-  // single argument, ( object | array | string )
+  // single argument, ( object | array | string | Symbol )
   if ( args.length === 1 ) {
-    let
-      firstType = typeof first,
-      firstIsArray = Array.isArray( first );
+    let isArray = Array.isArray( first );
 
-    // arg is a single object of key value pairs
-    if ( firstType !== 'string' && !firstIsArray ) {
-      return getKeyValueFromObject( first );
+    // single symbol
+    if ( firstType === 'symbol' ) {
+      return [ args, args ];
     }
 
-    // argument is a single array
-    if ( firstIsArray ) {
-      return [ first, intRange( 0, first.length )];
+    // single string
+    if ( firstType === 'string' ) {
+      return [ args, [ 0 ]];
     }
 
-    // argument is a 'single string'
-    return [ args, [ 0 ]];
+    // single array
+    if ( isArray ) {
+      return [ first, symbolsOrRange( first, 0, first.length ) ];
+    }
+
+    // I guess it's an object
+    return getKeyValueFromObject( first );
   }
 
   // two arguments, ( startIndex, [ names ])
-  if ( args.length === 2 && Array.isArray( second )) {
-    return [ second, intRange( first, second.length + first )];
+  if ( args.length === 2 && firstType === 'number' && Array.isArray( second )) {
+    return [ second, intRange( first, second.length + first ) ];
   }
 
   // "unlimited" args, ( ...names );
-  return [ args, intRange( 0, args.length )];
+  return [ args, symbolsOrRange( args, 0, args.length ) ];
 }
