@@ -1,39 +1,132 @@
-'use strict';
+
+import test from 'tape';
+import $enum from '../src/api';
 
 var
-  test = require( 'tape' ),
-  Enum = require( '../src/enum' ).Enum;
+  descriptor,
+  addValue;
 
-test( 'enums can be created from a list of strings', function( assert ) {
+descriptor = {
+  configurable: false,
+  enumerable: true,
+  writable: false
+};
+
+addValue = function( value ) {
+  return Object.assign( descriptor, { value });
+};
+
+/* constructor tests */
+test( '$enum( ...names )', function( assert ) {
   var
-    args = [ 'one', 'two', 'three', 'four', 'five' ],
-    myEnum = new Enum( args );
+    i = 0,
+    args = [ 'zero', 'one', 'two', 'three' ],
+    myEnum = $enum( ...args );
 
-  args.forEach(function( propName ) {
-    assert.true( propName in myEnum, propName + ' is in enum' );
-  });
+  for ( let prop in myEnum ) {
+    if ( myEnum.hasOwnProperty( prop )) {
+      assert.deepEqual(
+        Object.getOwnPropertyDescriptor( myEnum, prop ),
+        addValue( i ),
+        `property ${ prop } has enum descriptor with value ${ i }`
+      );
+      i++;
+    }
+  }
 
+  assert.equal( i, args.length, 'iterated properties count matches argument list length' );
   assert.end();
 });
 
-test( 'enums can be created from an object of name:value pairs', function( assert ) {
+test( '$enum( { name: value })', function( assert ) {
   var
-    args = {
-      1: 'one',
-      2: 'two',
-      3: 'three',
-      4: 'four',
-      5: 'five'
+    length = 0,
+    argument = {
+      1: 'a',
+      2: 'b',
+      3: 'c',
+      4: 'd',
+      5: 'e'
     },
-    myEnum = new Enum( args );
+    myEnum = $enum( argument );
 
-  Object.keys( args ).forEach(function( propName ) {
-    var value = args[ propName ];
+  for ( let prop in argument ) {
+    if ( argument.hasOwnProperty( prop )) {
+      let value = argument[ prop ];
+      assert.equals(
+        value,
+        myEnum[ prop ],
+        `enum value mirrors object based argument, ${ prop }:${ value }`
+      );
+      length++;
+    }
+  }
 
-    assert.true( propName in myEnum, propName + ' is in enum' );
-    assert.true( value === myEnum[ propName ], propName + ' maps to ' + value + ' in enum' );
-  });
+  for ( let prop in myEnum ) {
+    if ( myEnum.hasOwnProperty( prop )) {
+      assert.deepEqual(
+        Object.getOwnPropertyDescriptor( myEnum, prop ),
+        addValue( argument[ prop ]),
+        `property ${ prop } has enum descriptor with value ${ myEnum[ prop ]}`
+      );
+      length--;
+    }
+  }
 
+  assert.equal( length, 0, 'iterated properties count matches for both argument and enum' );
+  assert.end();
+});
+
+test( '$enum([ names ])', function( assert ) {
+  var
+    i = 0,
+    args = [ 'zero', 'one', 'two' ],
+    myEnum = $enum( args );
+
+  for ( let prop in myEnum ) {
+    if ( myEnum.hasOwnProperty( prop )) {
+      assert.deepEqual(
+        Object.getOwnPropertyDescriptor( myEnum, prop ),
+        addValue( i ),
+        `property ${ prop } has enum descriptor with value ${ i }`
+      );
+      i++;
+    }
+  }
+
+  assert.equals( i, args.length, 'iterated properties count matches argument length' );
+  assert.end();
+});
+
+test( '$enum( startIndex, [ names ])', function( assert ) {
+  var
+    i = 0,
+    startIndex = 2,
+    enumValues,
+    enumList = [ 'two', 'three', 'four', 'five', '6' ],
+    myEnum = $enum( startIndex, enumList );
+
+  enumValues = {
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    6: 6
+  };
+
+  for ( let prop in myEnum ) {
+    if ( myEnum.hasOwnProperty( prop )) {
+      let value = enumValues[ prop ];
+      assert.deepEqual(
+        Object.getOwnPropertyDescriptor( myEnum, prop ),
+        addValue( value ),
+        `property ${ prop } has enum descriptor with value ${ value }`
+      );
+      i++;
+    }
+  }
+
+  assert.equals( i, enumList.length, 'iterated properties count matches enum argument list' );
   assert.end();
 });
 

@@ -1,11 +1,22 @@
 {
-  "name": "enumJS",
+  "name": "enumjs",
+  "private": true,
   "version": "0.0.1",
   "description": "A class for making ENUMs in JavaScript ES5",
-  "main": "src/enum.js",
-  "private": true,
+  "main": "dist/enum.umd.js",
+  "jsnext:main": "dest/enum.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "directories": {
+    "doc": "docs",
+    "lib": "dist",
+    "test": "tests"
+  },
+  "keywords": [],
   "license": "MIT",
-  "author": "Ryan Bogle <ryan.bogle@gmail.com>",
+  "author": "Ryan Bogle",
   "homepage": "https://github.com/Ashwell/EnumJS",
   "repository": {
     "type": "git",
@@ -14,17 +25,50 @@
   "bugs": {
     "url": "https://github.com/Ashwell/EnumJS/issues"
   },
-  "directories": {
-    "test": "tests"
+  "babel": {
+    "presets": [
+      "es2015-rollup"
+    ]
+  },
+  "pre-commit": {
+    "run": [
+      "lint",
+      "test"
+    ]
   },
   "scripts": {
-    "test": "tape 'tests/**/*.js' | tap-spec",
-    "posttest": "eslint ."
+    "clean:dist": "trash 'dist/*'",
+    "clean:build": "trash 'build/*'",
+    "lint": "eslint .",
+    "rollup:es6": "rollup -c configs/rollup.es6.js",
+    "rollup:umd": "rollup -c configs/rollup.umd.js",
+    "rollup:tests": "rollup -c configs/rollup.tests.js",
+    "rollup": "npm-run-all -s 'rollup:*'",
+    "browserify:tests": "browserify -e build/enum.tests.js -o build/enum.browser.tests.js",
+    "prebuild": "npm-run-all -s 'clean:*'",
+    "build": "npm-run-all -s rollup:es6 rollup:umd",
+    "build:tests": "npm-run-all -s rollup:tests browserify:tests",
+    "pretest": "npm-run-all -s build build:tests",
+    "test:node": "node ./build/enum.tests.js | tap-spec",
+    "test:browser": "node -r shelljs/global -p \"cat('build/enum.browser.tests.js')\" | tap-closer | smokestack | tap-spec",
+    "test": "npm-run-all -s test:node test:browser",
+    "prepublish": "npm run build && npm test"
   },
   "devDependencies": {
     "babel-eslint": "^5.0.0-beta6",
+    "babel-preset-es2015-rollup": "^1.0.0",
+    "browserify": "^12.0.2",
     "eslint": "^1.10.3",
+    "npm-run-all": "^1.4.0",
+    "pre-commit": "^1.1.2",
+    "rollup": "^0.24.0",
+    "rollup-plugin-babel": "^2.3.8",
+    "rollup-plugin-multi-entry": "^1.0.1",
+    "shelljs": "^0.5.3",
+    "smokestack": "^3.4.1",
+    "tap-closer": "^1.0.0",
     "tap-spec": "^4.1.1",
-    "tape": "^4.4.0"
+    "tape": "^4.4.0",
+    "trash-cli": "^1.2.0"
   }
 }
